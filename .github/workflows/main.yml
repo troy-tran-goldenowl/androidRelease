@@ -21,21 +21,12 @@ jobs:
     - name: Install dependencies
       run: yarn install
 
-    - name: Configure environment variables for signing
-      run: |
-        echo "Setting environment variables for signing..."
-        echo "::set-env name=KEYSTORE_FILE::${{ secrets.KEYSTORE_HASH }}"
-        echo "::set-env name=KEYSTORE_PASSWORD::${{ secrets.KEY_PASSWORD }}"
-        echo "::set-env name=KEY_ALIAS::${{ secrets.KEY_ALIAS }}"
-        echo "::set-env name=KEY_PASSWORD::${{ secrets.STORE_PASSWORD }}"
 
-    - name: Build Android app with release key store
-      run: |
-        cd android
-        ./gradlew assembleRelease \
-          -PsigningConfig=release \
-          -Pandroid.signingConfigs.release.storeFile=$KEYSTORE_HASH \
-          -Pandroid.signingConfigs.release.storePassword=$KEY_PASSWORD \
-          -Pandroid.signingConfigs.release.keyAlias=$KEY_ALIAS \
-          -Pandroid.signingConfigs.release.keyPassword=$STORE_PASSWORD
+    - name: Build Signed APK
+      uses: victorbnl/build-signed-apk@main
+      with:
+        keystore_b64: ${{ secrets.KEYSTORE_HASH }}
+        keystore_password: ${{ secrets.STORE_PASSWORD }}
+        key_alias: ${{ secrets.KEY_ALIAS }}
+        key_password: ${{ secrets.KEYPASSWORD }}
 
