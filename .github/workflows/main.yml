@@ -29,4 +29,5 @@ jobs:
         keystore_password: ${{ secrets.STORE_PASSWORD }}
         key_alias: ${{ secrets.KEY_ALIAS }}
         key_password: ${{ secrets.KEYPASSWORD }}
+        gradlew_dir: ./android
 
